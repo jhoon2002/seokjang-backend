@@ -9,14 +9,18 @@ const indexRouter = require('./routes/index')
 const paysRouter = require('./routes/pays')
 const filesRouter = require('./routes/files')
 
-// mysqldb 연결
-// require("./connection.js")
+// mysql 연결
+const db = require("./models/index.js")
 
-const sequelize = require('./models/index').sequelize
+// 실행 모드
+// db.sequelize.sync()
+
+// 개발 모드
+db.sequelize.sync({ alter: true }).then(() => {
+  console.log(">>>>>>>>>>>> MYSQL 접속, 테이블 생성")
+})
 
 const app = express()
-
-sequelize.sync()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

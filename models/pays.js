@@ -103,8 +103,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        "메일주소": {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         "지급일": {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.STRING,
             allowNull: true,
         },
         "비고": {
@@ -113,5 +117,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     }, {
         timestamps: true,
+        createdAt: "created",
+        updatedAt: "updated"
     })
 }
