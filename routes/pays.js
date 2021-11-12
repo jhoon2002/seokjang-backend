@@ -74,6 +74,7 @@ router.delete("/", wrapAsync(async (req, res) => {
         msg: "모든 데이터 삭제"
     })
 }))
+
 router.post("/test-send-mail", wrapAsync( async (req, res) => {
 
     const { body: email } = req
