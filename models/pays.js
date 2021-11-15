@@ -115,6 +115,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: true,
         },
+        "발송결과": {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }, {
         timestamps: true,
         createdAt: "created",
