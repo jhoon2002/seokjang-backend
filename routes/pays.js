@@ -90,7 +90,7 @@ router.get("/mailing", wrapAsync( async (req, res) => {
 
 router.post("/test-send-mail", wrapAsync( async (req, res) => {
 
-    let resultCount = 0
+    //emailSendResultCount = 0
 
     //app.io.on("connection", socket => {
     //    setInterval(() => {
@@ -115,14 +115,9 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
     //메일 발송
     const transport = nodemailer.createTransport({
         service: "Gmail",
-        //host: 'spam.karts.ac.kr',
-        //port: 465,
-        //secure: true,
         auth: {
             user: "jhoon2002@gmail.com",
             pass: "!arts3007"
-            //user: "cooperation@karts.ac.kr",
-            //pass: "(cooperation2018*"
         },
         tls: {
             rejectUnauthorized: false
@@ -235,15 +230,15 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
 </div>
 `
         const ret = await transport.sendMail({
-            //from: "jhoon2002@gmail.com",
-            //to: pay.메일주소,
-            from: "cooperation@karts.ac.kr",
+            from: "jhoon2002@gmail.com",
             to: email.to,
             subject: email.subject,
             html: html
         })
         rets.push(ret)
-        resultCount++
+        emailSendResultCount++
+
+        console.log("emailSendResultCount", emailSendResultCount)
 
         await PAYS.update({ 발송결과: '테스트 완료' }, {
             where: {

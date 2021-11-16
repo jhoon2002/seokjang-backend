@@ -66,4 +66,8 @@ app.use(function(err, req, res, next) {
   res.render('error')
 })
 
+// global.변수명 = 사용하려는 변수명
+let emailSendResultCount = 0
+global.emailSendResultCount = emailSendResultCount
+
 module.exports = app

@@ -32,11 +32,49 @@ var io = require('socket.io')(server);
 //   client.on('disconnect', function(){});
 // });
 
+//io.on('connection', function(socket) {
+//  socket.on('SEND_MESSAGE', function(data) {
+//    io.emit('MESSAGE', data)
+//  })
+//})
+/*
+
+const interval = setInterval(() => {
+  io.emit('MESSAGE', emailSendResultCount)
+})
+clearInterval(interval)
+*/
+
 io.on('connection', function(socket) {
-  socket.on('SEND_MESSAGE', function(data) {
-    io.emit('MESSAGE', data)
-  });
-});
+
+  socket.on('SEND_MESSAGE', function(isStop) {
+
+    /*if (!isStop.stop) {
+      let interval = setInterval(() => {
+        console.log('esrc', emailSendResultCount)
+        io.emit('MESSAGE', { esrc : emailSendResultCount, int: interval})
+      }, 1000)
+    } else {
+      console.log('try to stop...')
+      console.log('isStop.int', isStop.int)
+      clearInterval(isStop.int)
+    }*/
+
+   var interval = setInterval(function() {
+      if (!isStop) {
+        console.log('eSRC', emailSendResultCount)
+        io.emit('MESSAGE', emailSendResultCount)
+        setTimeout(function(){ clearInterval(interval);}, 10000);
+      } else {
+        console.log("stopped")
+        //clearInterval(interval)
+        //setTimeout(function(){ clearInterval(interval);}, 3000);
+        // 밖에서 선언한 interval을 안에서 중지시킬 수 있음
+      }
+    }, 1000)
+    //clearInterval(interval)
+  })
+})
 
 
 /**
