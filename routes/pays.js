@@ -90,7 +90,7 @@ router.get("/mailing", wrapAsync( async (req, res) => {
 
 router.post("/test-send-mail", wrapAsync( async (req, res) => {
 
-    //emailSendResultCount = 0
+    //emailResultCount = 0
 
     //app.io.on("connection", socket => {
     //    setInterval(() => {
@@ -106,7 +106,8 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
     const { count, rows } = await PAYS.findAndCountAll({
         order: [ '강사명' ],
         offset: offset,
-        limit: Number(email.limit)
+        limit: Number(email.limit),
+        raw: true
     })
 
     //console.log("count", count)
@@ -126,12 +127,21 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
 
     let rets = []
 
+    emailResultCount = 0
+    emailTotalCount = rows.length
+
     //for (const [index, pay] of rows.entries()) {
     for ( let i = 0; i < rows.length; i++ ) {
 
         const pay = rows[i]
 
-        //console.log(i, pay.강사명)
+        // null 값 0으로 변경
+        for (let key in pay) {
+            //console.log(key, pay[key])
+            if (pay[key] === null) {
+                pay[key] = 0
+            }
+        }
 
         let account = pay['은행계좌번호']
         if (account) {
@@ -196,7 +206,7 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
             </tr>
             <tr>
                 <td style="border: 1px solid black; padding:6px;"></td>
-                <td style=" text-align:right; border: 1px solid black; padding:6px;">(시수:${pay.시수}, 단가:${pay.단가.toLocaleString()})</td>
+                <td style=" text-align:right; border: 1px solid black; padding:6px;">(시수:${pay.시수} × 단가:${pay.단가.toLocaleString()})</td>
                 <td style="border: 1px solid black; padding:6px; padding-left: 15px;">주민세</td>
                 <td style=" text-align:right; border: 1px solid black; padding:6px;">${pay.주민세.toLocaleString()}</td>
             </tr>
@@ -226,7 +236,7 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
             </tr>
         </tbody>
     </table>
-    <div style="margin-top: 10px;">※문의 사항은 02-746-9058으로 연락주시기 바랍니다.</div>
+    <div style="margin-top: 10px;">※본 메일은 회신이 불가하오니, 문의 사항은 02-746-9058으로 연락주시기 바랍니다.</div>
 </div>
 `
         const ret = await transport.sendMail({
@@ -235,10 +245,10 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
             subject: email.subject,
             html: html
         })
-        rets.push(ret)
-        emailSendResultCount++
+        //rets.push(ret)
+        emailResultCount++
 
-        console.log("emailSendResultCount", emailSendResultCount)
+        console.log("emailResultCount", emailResultCount)
 
         await PAYS.update({ 발송결과: '테스트 완료' }, {
             where: {

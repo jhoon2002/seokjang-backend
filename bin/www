@@ -49,6 +49,12 @@ io.on('connection', function(socket) {
 
   socket.on('SEND_MESSAGE', function(isStop) {
 
+    //console.log('eSRC', emailResultCount)
+    io.emit('MESSAGE', {
+      totalCount: emailTotalCount,
+      resultCount: emailResultCount
+    })
+
     /*if (!isStop.stop) {
       let interval = setInterval(() => {
         console.log('esrc', emailSendResultCount)
@@ -60,7 +66,7 @@ io.on('connection', function(socket) {
       clearInterval(isStop.int)
     }*/
 
-   var interval = setInterval(function() {
+   /*var interval = setInterval(function() {
       if (!isStop) {
         console.log('eSRC', emailSendResultCount)
         io.emit('MESSAGE', emailSendResultCount)
@@ -71,7 +77,7 @@ io.on('connection', function(socket) {
         //setTimeout(function(){ clearInterval(interval);}, 3000);
         // 밖에서 선언한 interval을 안에서 중지시킬 수 있음
       }
-    }, 1000)
+    }, 1000)*/
     //clearInterval(interval)
   })
 })
