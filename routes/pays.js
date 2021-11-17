@@ -88,15 +88,7 @@ router.get("/mailing", wrapAsync( async (req, res) => {
     })
 }))
 
-router.post("/test-send-mail", wrapAsync( async (req, res) => {
-
-    //emailResultCount = 0
-
-    //app.io.on("connection", socket => {
-    //    setInterval(() => {
-    //        socket.broadcast.emit("newdata", resultCount)
-    //    }, 1000)
-    //})
+const sendMail = async function(req, isTest) {
 
     const { body: email } = req
 
@@ -110,9 +102,6 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
         raw: true
     })
 
-    //console.log("count", count)
-    //console.log("rows", rows)
-
     //메일 발송
     const transport = nodemailer.createTransport({
         service: "Gmail",
@@ -124,8 +113,6 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
             rejectUnauthorized: false
         }
     })
-
-    let rets = []
 
     emailResultCount = 0
     emailTotalCount = rows.length
@@ -202,7 +189,7 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
                 <td style="border: 1px solid black; padding:6px; padding-left: 15px;">강의료</td>
                 <td style="text-align:right; border: 1px solid black; padding:6px;">${pay.강의료.toLocaleString()}</td>
                 <td style="border: 1px solid black; padding:6px; padding-left: 15px;">소득세</td>
-                <td style=" text-align:right; border: 1px solid black; padding:6px;">${pay.강의료.toLocaleString()}</td>
+                <td style=" text-align:right; border: 1px solid black; padding:6px;">${pay.소득세.toLocaleString()}</td>
             </tr>
             <tr>
                 <td style="border: 1px solid black; padding:6px;"></td>
@@ -239,32 +226,39 @@ router.post("/test-send-mail", wrapAsync( async (req, res) => {
     <div style="margin-top: 10px;">※본 메일은 회신이 불가하오니, 문의 사항은 02-746-9058으로 연락주시기 바랍니다.</div>
 </div>
 `
-        const ret = await transport.sendMail({
+        await transport.sendMail({
             from: "jhoon2002@gmail.com",
-            to: email.to,
+            to: (isTest) ? email.to : pay['메일주소'],
             subject: email.subject,
             html: html
         })
-        //rets.push(ret)
+
         emailResultCount++
 
         console.log("emailResultCount", emailResultCount)
 
-        await PAYS.update({ 발송결과: '테스트 완료' }, {
+        await PAYS.update({ 발송결과: isTest ? '테스트' : '발송 완료' }, {
             where: {
                 id: pay.id
             }
         })
-
     }
 
     transport.close()
+}
 
+router.post("/test-send-mail", wrapAsync( async (req, res) => {
+    await sendMail(req, true)
     return res.status(200).json({
-        msg: "발송 성공",
-        count: rets.length
+        msg: "테스트 발송 성공"
     })
+}))
 
+router.post("/send-mail", wrapAsync( async (req, res) => {
+    await sendMail(req, false)
+    return res.status(200).json({
+        msg: "발송 성공"
+    })
 }))
 
 router.get('/some-stream', function (req, res) {
