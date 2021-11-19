@@ -8,7 +8,7 @@
   },
   "test": {
     "username": "seokjang",
-    "password": 1111,
+    "password": "1111",
     "database": "seokjang",
     "host": "127.0.0.1",
     "dialect": "mysql"
