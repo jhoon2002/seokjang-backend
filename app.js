@@ -38,6 +38,7 @@ const app = express()
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
+app.use(require('connect-history-api-fallback')())
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
