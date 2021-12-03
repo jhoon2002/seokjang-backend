@@ -20,6 +20,8 @@ db.sequelize.sync({ alter: true }).then(() => {
   console.log(">>>>>>>>>>>> MYSQL 접속, 테이블 생성")
 })
 
+console.log("process.env.VUE_APP_SOCKET_URL: ", process.env.VUE_APP_SOCKET_URL)
+
 const app = express()
 
 // const server = app.listen(3001, function() {
