@@ -104,10 +104,15 @@ const sendMail = async function(req, isTest) {
 
     //메일 발송
     const transport = nodemailer.createTransport({
-        service: "Gmail",
+        // service: "Gmail",
+        // auth: {
+        //     user: "young.artist.cooperation@gmail.com",
+        //     pass: "(cooperation2018*"
+        // },
+        service: "Naver",
         auth: {
-            user: "young.artist.cooperation@gmail.com",
-            pass: "(cooperation2018*"
+            user: "cooperation_online@naver.com",
+            pass: "Karts_205899*"
         },
         tls: {
             rejectUnauthorized: false
@@ -227,7 +232,7 @@ const sendMail = async function(req, isTest) {
 </div>
 `
         await transport.sendMail({
-            from: "young.artist.cooperation@google.com",
+            from: "cooperation_online@naver.com",
             to: (isTest) ? email.to : pay['메일주소'],
             subject: email.subject,
             html: html
